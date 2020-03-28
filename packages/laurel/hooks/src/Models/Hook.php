@@ -27,6 +27,51 @@ class Hook implements HookContract
             throw new \Exception('Call time for hook has not been specified');
     }
 
+    private static function checkCallback($callback, $callbackClassOrObject)
+    {
+        if (is_null($callbackClassOrObject))
+            self::checkCallbackIfItIsClosure($callback);
+        else if (is_object($callbackClassOrObject))
+            self::checkCallbackIfItIsObject($callback, $callbackClassOrObject);
+        else if (is_string($callbackClassOrObject))
+            self::checkCallbackIfItIsStaticMethod($callback, $callbackClassOrObject);
+        else
+            self::throwIncorrectCallbackTypeException();
+    }
+
+    private static function throwIncorrectCallbackTypeException()
+    {
+        throw new Exception('Callback function must be closure, class name with name of static method or object with method name');
+    }
+
+    private static function throwCallbackObjectDoesNotHasMethod($callback)
+    {
+        throw new Exception("Callback object does not has method \"{$callback}\"");
+    }
+
+    private static function throwCallbackClassDoesNotHasMethod($callback)
+    {
+        throw new Exception("Callback class does not has static method \"{$callback}\"");
+    }
+
+    private static function checkCallbackIfItIsClosure($callback)
+    {
+        if (!(new ReflectionFunction($callback))->isClosure())
+            self::throwIncorrectCallbackTypeException();
+    }
+
+    private static function checkCallbackIfItIsObject($callback, $callbackObject)
+    {
+        if (!method_exists($callbackObject, $callback))
+            self::throwCallbackObjectDoesNotHasMethod($callback);
+    }
+
+    private static function checkCallbackIfItIsStaticMethod($callback, $callbackClass)
+    {
+        if (!method_exists($callbackClass, $callback))
+            self::throwCallbackClassDoesNotHasMethod($callback);
+    }
+
     public function __construct(string $actionName, $callback, $callbackClassOrObject = null, $callTime = self::CALL_BEFORE, $data = null)
     {
         $this->setActionName($actionName);
@@ -88,51 +133,6 @@ class Hook implements HookContract
     public function getData()
     {
         return $this->data;
-    }
-
-    private static function checkCallback($callback, $callbackClassOrObject)
-    {
-        if (is_null($callbackClassOrObject))
-            self::checkCallbackIfItIsClosure($callback);
-        else if (is_object($callbackClassOrObject))
-            self::checkCallbackIfItIsObject($callback, $callbackClassOrObject);
-        else if (is_string($callbackClassOrObject))
-            self::checkCallbackIfItIsStaticMethod($callback, $callbackClassOrObject);
-        else
-            self::throwIncorrectCallbackTypeException();
-    }
-
-    private static function throwIncorrectCallbackTypeException()
-    {
-        throw new Exception('Callback function must be closure, class name with name of static method or object with method name');
-    }
-
-    private static function throwCallbackObjectDoesNotHasMethod($callback)
-    {
-        throw new Exception("Callback object does not has method \"{$callback}\"");
-    }
-
-    private static function throwCallbackClassDoesNotHasMethod($callback)
-    {
-        throw new Exception("Callback class does not has static method \"{$callback}\"");
-    }
-
-    private static function checkCallbackIfItIsClosure($callback)
-    {
-        if (!(new ReflectionFunction($callback))->isClosure())
-            self::throwIncorrectCallbackTypeException();
-    }
-
-    private static function checkCallbackIfItIsObject($callback, $callbackObject)
-    {
-        if (!method_exists($callbackObject, $callback))
-            self::throwCallbackObjectDoesNotHasMethod($callback);
-    }
-
-    private static function checkCallbackIfItIsStaticMethod($callback, $callbackClass)
-    {
-        if (!method_exists($callbackClass, $callback))
-            self::throwCallbackClassDoesNotHasMethod($callback);
     }
 
     public function callBefore() : self

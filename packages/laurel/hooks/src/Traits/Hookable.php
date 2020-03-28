@@ -12,7 +12,6 @@ use Laurel\Hooks\Contracts\HookContract;
 /**
  * Trait Hookable
  * @package App\Traits
- * TODO Need to add method for saving hooks in the database
  */
 trait Hookable
 {
@@ -75,16 +74,60 @@ trait Hookable
         });
     }
 
+    public function fireAllHooks()
+    {
+        $this->fireBeforeHooks();
+        $this->fireAfterHooks();
+    }
+
+    public function fireAllHooksOnce()
+    {
+        $this->fireAllHooks();
+        $this->removeAllHooks();
+    }
+
+    public function fireBeforeHooks()
+    {
+        $this->getBeforeProcessingHooks()->each(function (Hook $hook) {
+            $hook->runCallback();
+        });
+    }
+
+    public function fireBeforeHooksOnce()
+    {
+        $this->fireBeforeHooks();
+        $this->removeAllBeforeProcessingHooks();
+    }
+
+    public function fireAfterHooks()
+    {
+        $this->getAfterProcessingHooks()->each(function (Hook $hook) {
+            $hook->runCallback();
+        });
+    }
+
+    public function fireAfterHooksOnce()
+    {
+        $this->fireAfterHooks();
+        $this->removeAllAfterProcessingHooks();
+    }
+
     public function fireHooks(string $actionName, string $callTime)
     {
         Hook::checkCallTime($callTime);
         if ($callTime === Hook::CALL_BEFORE)
-            $this->fireBeforeHooks($actionName);
-        else
-            $this->fireAfterHooks($actionName);
+            $this->fireBeforeHooksForAction($actionName);
+        else if ($callTime === Hook::CALL_AFTER)
+            $this->fireAfterHooksForAction($actionName);
     }
 
-    public function fireBeforeHooks(string $actionName)
+    public function fireHooksOnce(string $actionName, string $callTime)
+    {
+        $this->fireHooks($actionName, $callTime);
+        $this->removeHooks($actionName, $callTime);
+    }
+
+    public function fireBeforeHooksForAction(string $actionName)
     {
         $hooks = $this->getBeforeProcessingHooksByActionName($actionName);
         $hooks->each(function (Hook $hook) {
@@ -92,11 +135,70 @@ trait Hookable
         });
     }
 
-    public function fireAfterHooks(string $actionName)
+    public function fireBeforeHooksForActionOnce(string $actionName)
+    {
+        $this->fireBeforeHooksForAction($actionName);
+        $this->removeBeforeHooksForAction($actionName);
+    }
+
+    public function fireAfterHooksForAction(string $actionName)
     {
         $hooks = $this->getAfterProcessingHooksByActionName($actionName);
         $hooks->each(function (Hook $hook) {
             $hook->runCallback();
+        });
+    }
+
+    public function fireAfterHooksForActionOnce(string $actionName)
+    {
+        $this->fireAfterHooksForAction($actionName);
+        $this->removeAfterHooksForAction($actionName);
+    }
+
+    public function removeAllHooks()
+    {
+        $this->hooks = collect([]);
+    }
+
+    public function removeHooks(string $actionName, string $callTime)
+    {
+        $this->hooks = $this->getHooks()->reject(function (Hook $hook) use ($actionName, $callTime) {
+            return $hook->getActionName() === $actionName && $hook->getCallTime() === $callTime;
+        });
+    }
+
+    public function removeAllHooksForAction(string $actionName)
+    {
+        $this->hooks = $this->getHooks()->reject(function (Hook $hook) use ($actionName) {
+           return $hook->getActionName() === $actionName;
+        });
+    }
+
+    public function removeAllBeforeProcessingHooks()
+    {
+        $this->hooks = $this->getHooks()->reject(function (Hook $hook) {
+            return $hook->isCallableBeforeProcessing();
+        });
+    }
+
+    public function removeAllAfterProcessingHooks()
+    {
+        $this->hooks = $this->getHooks()->reject(function (Hook $hook) {
+            return $hook->isCallableAfterProcessing();
+        });
+    }
+
+    public function removeBeforeHooksForAction($actionName)
+    {
+        $this->hooks = $this->getHooks($actionName)->reject(function (Hook $hook) use ($actionName) {
+            return $hook->isCallableBeforeProcessing() && $hook->getActionName() === $actionName;
+        });
+    }
+
+    public function removeAfterHooksForAction($actionName)
+    {
+        $this->hooks = $this->getHooks($actionName)->reject(function (Hook $hook) use ($actionName) {
+            return $hook->isCallableAfterProcessing() && $hook->getActionName() === $actionName;
         });
     }
 }

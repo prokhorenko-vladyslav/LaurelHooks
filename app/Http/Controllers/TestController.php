@@ -15,19 +15,21 @@ class TestController extends Controller
         $test = [
             'test' => 123
         ];
-        $hook1 = new Hook('testAction', function($data) {
+        $test2 = 'Test for using in closure';
+        $hook1 = new Hook('testAction', function($data) use ($test2) {
             $data['test'] = 222;
-            dump($data);
         }, null,Hook::CALL_BEFORE, $test);
         $hook2 = new Hook('testAction', function() {
-            dump('Test closure 2');
         }, null,Hook::CALL_BEFORE);
-        $hook3 = new Hook('testAction', 'testHookAction', $this,Hook::CALL_BEFORE);
+        $hook3 = new Hook('testAction2', 'testHookAction', $this,Hook::CALL_BEFORE);
         $this->addHook($hook1);
         $this->addHook($hook2);
         $this->addHook($hook3);
-        $this->fireHooks('testAction', Hook::CALL_BEFORE);
-//        dd($test);
+        $this->fireHooksOnce('testAction', Hook::CALL_BEFORE);
+//        $this->fireHooksOnce('testAction2', Hook::CALL_BEFORE);
+//        dump($this->getHooks());
+//        $this->removeBeforeHooksForAction('testAction');
+        dd($this->getHooks());
     }
 
     public function testHookAction()

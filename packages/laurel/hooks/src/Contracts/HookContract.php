@@ -9,6 +9,8 @@ use phpDocumentor\Reflection\Types\Mixed_;
 
 interface HookContract
 {
+    public static function checkCallTime(string $callTime);
+
     public function setActionName(string $actionName) : self;
     public function setCallTime($callTime) : self;
     public function setCallback($callback, &$callbackClassOrObject) : self;
@@ -16,6 +18,7 @@ interface HookContract
     public function getActionName() : string;
     public function getCallTime() : string;
     public function getCallback();
+    public function getCallbackClassOrObject();
     public function getData();
     public function runCallback();
     public function callBefore() : self;
