@@ -9,13 +9,13 @@ use phpDocumentor\Reflection\Types\Mixed_;
 
 interface HookContract
 {
-    public function setActionTime(string $actionName) : self;
+    public function setActionName(string $actionName) : self;
     public function setCallTime($callTime) : self;
     public function setCallback($callback) : self;
     public function setData($callback) : self;
     public function getActionName() : string;
     public function getCallTime() : string;
-    public function getCallback() : Mixed_;
+    public function getCallback();
     public function getData() : Collection;
     public function runCallback();
     public function callBefore() : self;
