@@ -1,0 +1,21 @@
+{
+    "name": "laurel/hooks",
+    "description": "Simple hooks for Laravel",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Vladyslav Prokhorenko",
+            "email": "prohorenko.vladyslav.98@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Laurel\\Hooks\\Providers\\HooksServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "require": {}
+}
