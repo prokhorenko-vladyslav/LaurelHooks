@@ -12,15 +12,26 @@ class TestController extends Controller
 
     public function index()
     {
-        $hook1 = new Hook('testAction', function() {
-            dump('Test closure');
-        }, Hook::CALL_BEFORE);
+        $test = [
+            'test' => 123
+        ];
+        $hook1 = new Hook('testAction', function($data) {
+            $data['test'] = 222;
+            dump($data);
+        }, null,Hook::CALL_BEFORE, $test);
         $hook2 = new Hook('testAction', function() {
             dump('Test closure 2');
-        }, Hook::CALL_BEFORE);
+        }, null,Hook::CALL_BEFORE);
+        $hook3 = new Hook('testAction', 'testHookAction', $this,Hook::CALL_BEFORE);
         $this->addHook($hook1);
         $this->addHook($hook2);
+        $this->addHook($hook3);
         $this->fireHooks('testAction', Hook::CALL_BEFORE);
-        dd('awdawd');
+//        dd($test);
+    }
+
+    public function testHookAction()
+    {
+//        dd('from simple method');
     }
 }

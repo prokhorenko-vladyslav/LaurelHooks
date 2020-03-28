@@ -11,12 +11,12 @@ interface HookContract
 {
     public function setActionName(string $actionName) : self;
     public function setCallTime($callTime) : self;
-    public function setCallback($callback) : self;
+    public function setCallback($callback, &$callbackClassOrObject) : self;
     public function setData($callback) : self;
     public function getActionName() : string;
     public function getCallTime() : string;
     public function getCallback();
-    public function getData() : Collection;
+    public function getData();
     public function runCallback();
     public function callBefore() : self;
     public function callAfter() : self;

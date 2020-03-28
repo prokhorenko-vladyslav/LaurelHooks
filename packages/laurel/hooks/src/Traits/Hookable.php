@@ -78,11 +78,10 @@ trait Hookable
     public function fireHooks(string $actionName, string $callTime)
     {
         Hook::checkCallTime($callTime);
-        if ($callTime === Hook::CALL_BEFORE) {
-            return $this->fireBeforeHooks($actionName);
-        } else {
-            return $this->fireAfterHooks($actionName);
-        }
+        if ($callTime === Hook::CALL_BEFORE)
+            $this->fireBeforeHooks($actionName);
+        else
+            $this->fireAfterHooks($actionName);
     }
 
     public function fireBeforeHooks(string $actionName)
@@ -95,6 +94,9 @@ trait Hookable
 
     public function fireAfterHooks(string $actionName)
     {
-
+        $hooks = $this->getAfterProcessingHooksByActionName($actionName);
+        $hooks->each(function (Hook $hook) {
+            $hook->runCallback();
+        });
     }
 }

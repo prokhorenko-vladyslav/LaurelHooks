@@ -6,6 +6,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/TestController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/TestController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/laurel/hooks/src/Contracts/HookContract.php" beforeDir="false" afterPath="$PROJECT_DIR$/packages/laurel/hooks/src/Contracts/HookContract.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/laurel/hooks/src/Models/Hook.php" beforeDir="false" afterPath="$PROJECT_DIR$/packages/laurel/hooks/src/Models/Hook.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/laurel/hooks/src/Traits/Hookable.php" beforeDir="false" afterPath="$PROJECT_DIR$/packages/laurel/hooks/src/Traits/Hookable.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -67,7 +68,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1585426845682</updated>
-      <workItem from="1585426847706" duration="2801000" />
+      <workItem from="1585426847706" duration="6185000" />
     </task>
     <servers />
   </component>
