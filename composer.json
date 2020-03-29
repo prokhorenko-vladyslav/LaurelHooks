@@ -9,13 +9,6 @@
             "email": "prohorenko.vladyslav.98@gmail.com"
         }
     ],
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Laurel\\Hooks\\Providers\\HooksServiceProvider"
-            ]
-        }
-    },
     "minimum-stability": "dev",
     "require": {}
 }
