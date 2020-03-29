@@ -3,10 +3,6 @@
 
 namespace Laurel\Hooks\Contracts;
 
-
-use Illuminate\Support\Collection;
-use phpDocumentor\Reflection\Types\Mixed_;
-
 interface HookContract
 {
     public static function checkCallTime(string $callTime);

@@ -9,6 +9,13 @@
             "email": "prohorenko.vladyslav.98@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
-    "require": {}
+    "autoload": {
+        "psr-4": {
+            "Laurel\\Hooks\\": "src/"
+        }
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "illuminate/support": "^7.3"
+    }
 }

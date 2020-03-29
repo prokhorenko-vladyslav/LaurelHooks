@@ -7,7 +7,6 @@ namespace Laurel\Hooks\Models;
 use Illuminate\Support\Collection;
 use Laurel\Hooks\Contracts\HookContract;
 use Mockery\Exception;
-use phpDocumentor\Reflection\Types\Mixed_;
 use ReflectionFunction;
 
 class Hook implements HookContract
